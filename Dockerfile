@@ -5,8 +5,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git \
     && docker-php-ext-install pdo pdo_mysql zip
 
-# Enable apache rewrite
-RUN a2enmod rewrite
+# Fix Apache MPM conflict + enable rewrite
+RUN a2dismod mpm_event \
+    && a2enmod mpm_prefork rewrite
 
 # Set working directory
 WORKDIR /var/www/html
